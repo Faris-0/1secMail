@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -45,6 +46,8 @@ public class NotificationService extends Service {
     private Runnable refresh;
     public static SharedPreferences notify;
 
+    private ArrayList<MessageModel> messageModelArrayList;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -65,8 +68,16 @@ public class NotificationService extends Service {
                             ArrayList<Integer> integerArrayList = new Gson().fromJson(notify.getString(TAG_READ, null),
                                     new TypeToken<ArrayList<Integer>>() {}.getType());
                             if (integerArrayList == null) integerArrayList = new ArrayList<>();
-                            if (integerArrayList.size() != 0) for (int i = 0; i < integerArrayList.size(); i++) loadCheck(integerArrayList.get(i), response.body());
-                            else for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
+                            if (integerArrayList.size() != 0) {
+                                messageModelArrayList = response.body();
+                                for (int i = 0; i < integerArrayList.size(); i++) loadCheck(integerArrayList.get(i), messageModelArrayList);
+                                for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
+                                        response.body().get(i).getFrom(),
+                                        response.body().get(i).getSubject(),
+                                        response.body().get(i).getDate(),
+                                        response.body().get(i).getId(),
+                                        false);
+                            } else for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
                                     response.body().get(i).getFrom(),
                                     response.body().get(i).getSubject(),
                                     response.body().get(i).getDate(),
@@ -88,16 +99,7 @@ public class NotificationService extends Service {
     }
 
     private void loadCheck(Integer id, ArrayList<MessageModel> body) {
-        for (int i = 0; i < body.size(); i++) {
-            if (!body.get(i).getId().equals(id)) {
-                notification(getApplicationContext(),
-                        body.get(i).getFrom(),
-                        body.get(i).getSubject(),
-                        body.get(i).getDate(),
-                        body.get(i).getId(),
-                        false);
-            }
-        }
+        for (int i = 0; i < body.size(); i++) if (id.equals(body.get(i).getId())) messageModelArrayList.remove(i);
     }
 
     public static void notification(Context context, String from, String subject, String datetime, Integer id, Boolean isRemove) {

@@ -46,12 +46,6 @@ public class inbox extends Fragment implements MessageAdapter.ItemClickListener 
 
         rvMessages = view.findViewById(R.id.idListMessages);
         rvMessages.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        SharedPreferences inbox = getActivity().getSharedPreferences(OneSecMail, Context.MODE_PRIVATE);
-        username = inbox.getString(TAG_USERNAME, null);
-        domain = inbox.getString(TAG_DOMAIN, null);
-
-        autoRefresh();
         
         return view;
     }
@@ -59,7 +53,6 @@ public class inbox extends Fragment implements MessageAdapter.ItemClickListener 
     private void autoRefresh() {
         refresh = new Runnable() {
             public void run() {
-                Log.d("SASAS", "SSS");
                 loadInbox();
                 handler.postDelayed(refresh, 5000);
             }
@@ -92,12 +85,6 @@ public class inbox extends Fragment implements MessageAdapter.ItemClickListener 
                 startActivity(new Intent(getActivity(), DetailMessageActivity.class).putExtra("id", messageModel.getId()));
                 break;
         }
-    }
-
-    @Override
-    public void onDestroy () {
-        handler.removeCallbacks(refresh);
-        super.onDestroy();
     }
 
     @Override
