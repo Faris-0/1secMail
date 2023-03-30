@@ -32,6 +32,8 @@ public class DetailMessageActivity extends AppCompatActivity {
 
     private TextView tvFrom, tvSubject, tvHtml;
 
+    private Boolean iCheck = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +59,9 @@ public class DetailMessageActivity extends AppCompatActivity {
                     SharedPreferences notify = getSharedPreferences(OneSecMail, Context.MODE_PRIVATE);
                     ArrayList<Integer> integerArrayList = new Gson().fromJson(notify.getString(TAG_READ, null), new TypeToken<ArrayList<Integer>>() {}.getType());
                     if (integerArrayList == null) integerArrayList = new ArrayList<>();
-                    if (integerArrayList.size() == 0) integerArrayList.add(id);
-                    else for (int i = 0; i < integerArrayList.size(); i++) if (!integerArrayList.get(i).equals(id)) integerArrayList.add(id);
+                    for (int i = 0; i < integerArrayList.size(); i++) if (integerArrayList.get(i).equals(id)) iCheck = true;
+                    if (iCheck) iCheck = false;
+                    else integerArrayList.add(id);
                     notify.edit().putString(TAG_READ, new Gson().toJson(integerArrayList)).apply();
                     notification(getApplicationContext(), "", "", "", id, true);
 

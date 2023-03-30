@@ -19,8 +19,8 @@ public class NotifikasiBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        final PendingResult pendingResult = goAsync();
-        new Task(pendingResult, intent, context).execute();
+//        final PendingResult pendingResult = goAsync();
+        new Task(goAsync(), intent, context).execute();
     }
 
     private static class Task extends AsyncTask<String, Integer, String> {
@@ -28,6 +28,8 @@ public class NotifikasiBroadcastReceiver extends BroadcastReceiver {
         private final PendingResult pendingResult;
         private final Intent intent;
         private final Context context;
+
+        private Boolean iCheck = false;
 
         private Task(PendingResult pendingResult, Intent intent, Context context) {
             this.pendingResult = pendingResult;
@@ -42,8 +44,9 @@ public class NotifikasiBroadcastReceiver extends BroadcastReceiver {
             if (integerArrayList == null) integerArrayList = new ArrayList<>();
             Integer id = intent.getIntExtra("id", 0);
             if (intent.getAction().equals("READ")) {
-                if (integerArrayList.size() == 0) integerArrayList.add(id);
-                else for (int i = 0; i < integerArrayList.size(); i++) if (!integerArrayList.get(i).equals(id)) integerArrayList.add(id);
+                for (int i = 0; i < integerArrayList.size(); i++) if (integerArrayList.get(i).equals(id)) iCheck = true;
+                if (iCheck) iCheck = false;
+                else integerArrayList.add(id);
                 notify.edit().putString(TAG_READ, new Gson().toJson(integerArrayList)).apply();
                 notification(context, "", "", "", id, true);
             }
@@ -53,7 +56,6 @@ public class NotifikasiBroadcastReceiver extends BroadcastReceiver {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            // Must call finish() so the BroadcastReceiver can be recycled.
             pendingResult.finish();
         }
     }
