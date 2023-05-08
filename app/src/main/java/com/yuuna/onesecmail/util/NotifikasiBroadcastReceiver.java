@@ -19,7 +19,6 @@ public class NotifikasiBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-//        final PendingResult pendingResult = goAsync();
         new Task(goAsync(), intent, context).execute();
     }
 

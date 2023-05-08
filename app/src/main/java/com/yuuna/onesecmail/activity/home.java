@@ -139,10 +139,7 @@ public class home extends Fragment {
     private String generateString(int lenght){
         char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < lenght; i++) {
-            char c = chars[new Random().nextInt(chars.length)];
-            stringBuilder.append(c);
-        }
+        for(int i = 0; i < lenght; i++) stringBuilder.append(chars[new Random().nextInt(chars.length)]);
         return stringBuilder.toString();
     }
 

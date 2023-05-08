@@ -50,11 +50,9 @@ public class inbox extends Fragment implements MessageAdapter.ItemClickListener 
     }
 
     private void autoRefresh() {
-        refresh = new Runnable() {
-            public void run() {
-                loadInbox();
-                handler.postDelayed(refresh, 5000);
-            }
+        refresh = () -> {
+            loadInbox();
+            handler.postDelayed(refresh, 5000);
         };
         handler.post(refresh);
     }

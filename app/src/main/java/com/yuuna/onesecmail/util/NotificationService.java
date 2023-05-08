@@ -18,7 +18,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -56,43 +55,42 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // do your jobs here
-        refresh = new Runnable() {
-            public void run() {
-                notify = getSharedPreferences(OneSecMail, Context.MODE_PRIVATE);
-                String login = notify.getString(TAG_USERNAME, "");
-                String domain = notify.getString(TAG_DOMAIN, "");
-                retrofitAPI.getAllMessage("getMessages", login, domain).enqueue(new Callback<ArrayList<MessageModel>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
-                        if (response.isSuccessful()) {
-                            ArrayList<Integer> integerArrayList = new Gson().fromJson(notify.getString(TAG_READ, null),
-                                    new TypeToken<ArrayList<Integer>>() {}.getType());
-                            if (integerArrayList == null) integerArrayList = new ArrayList<>();
-                            if (integerArrayList.size() != 0) {
-                                messageModelArrayList = response.body();
-                                for (int i = 0; i < integerArrayList.size(); i++) loadCheck(integerArrayList.get(i), messageModelArrayList);
-                                for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
-                                        response.body().get(i).getFrom(),
-                                        response.body().get(i).getSubject(),
-                                        response.body().get(i).getDate(),
-                                        response.body().get(i).getId(),
-                                        false);
-                            } else for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
+        refresh = () -> {
+            notify = getSharedPreferences(OneSecMail, Context.MODE_PRIVATE);
+            String login = notify.getString(TAG_USERNAME, "");
+            String domain = notify.getString(TAG_DOMAIN, "");
+
+            retrofitAPI.getAllMessage("getMessages", login, domain).enqueue(new Callback<ArrayList<MessageModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
+                    if (response.isSuccessful()) {
+                        ArrayList<Integer> integerArrayList = new Gson().fromJson(notify.getString(TAG_READ, null),
+                                new TypeToken<ArrayList<Integer>>() {}.getType());
+                        if (integerArrayList == null) integerArrayList = new ArrayList<>();
+                        if (integerArrayList.size() != 0) {
+                            messageModelArrayList = response.body();
+                            for (int i = 0; i < integerArrayList.size(); i++) loadCheck(integerArrayList.get(i), messageModelArrayList);
+                            for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
                                     response.body().get(i).getFrom(),
                                     response.body().get(i).getSubject(),
                                     response.body().get(i).getDate(),
                                     response.body().get(i).getId(),
                                     false);
-                        }
+                        } else for (int i = 0; i < response.body().size(); i++) notification(getApplicationContext(),
+                                response.body().get(i).getFrom(),
+                                response.body().get(i).getSubject(),
+                                response.body().get(i).getDate(),
+                                response.body().get(i).getId(),
+                                false);
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<ArrayList<MessageModel>> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-                handler.postDelayed(refresh, 5000); // 1000 == 1sec
-            }
+                @Override
+                public void onFailure(Call<ArrayList<MessageModel>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+            handler.postDelayed(refresh, 5000);
         };
         handler.post(refresh);
         return super.onStartCommand(intent, flags, startId);
@@ -109,10 +107,10 @@ public class NotificationService extends Service {
         } else {
             Intent intent = new Intent(context, DetailMessageActivity.class).putExtra("id", id).putExtra("isOPEN", true)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, id, intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, id, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent readIntent = new Intent(context, NotifikasiBroadcastReceiver.class).setAction("READ").putExtra("id", id);
-            PendingIntent readPendingIntent = PendingIntent.getBroadcast(context, id, readIntent, 0);
+            PendingIntent readPendingIntent = PendingIntent.getBroadcast(context, id, readIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             Date date = null;
             try {
