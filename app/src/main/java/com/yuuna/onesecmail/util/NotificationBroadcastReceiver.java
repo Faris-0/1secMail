@@ -1,8 +1,8 @@
 package com.yuuna.onesecmail.util;
 
 import static com.yuuna.onesecmail.util.NotificationService.notification;
-import static com.yuuna.onesecmail.util.SharedPreferences.OneSecMail;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_READ;
+import static com.yuuna.onesecmail.util.AppConstants.OneSecMail;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_READ;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
-public class NotifikasiBroadcastReceiver extends BroadcastReceiver {
+public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -1,4 +1,4 @@
-package com.yuuna.onesecmail.activity;
+package com.yuuna.onesecmail.ui;
 
 import android.content.Intent;
 import android.os.Bundle;

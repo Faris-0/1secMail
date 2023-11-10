@@ -1,4 +1,4 @@
-package com.yuuna.onesecmail.activity;
+package com.yuuna.onesecmail.ui;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 

@@ -1,10 +1,10 @@
 package com.yuuna.onesecmail.util;
 
 import static com.yuuna.onesecmail.util.RetrofitClient.retrofitAPI;
-import static com.yuuna.onesecmail.util.SharedPreferences.OneSecMail;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_DOMAIN;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_READ;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_USERNAME;
+import static com.yuuna.onesecmail.util.AppConstants.OneSecMail;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_DOMAIN;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_READ;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_USERNAME;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,7 +26,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yuuna.onesecmail.R;
-import com.yuuna.onesecmail.activity.DetailMessageActivity;
+import com.yuuna.onesecmail.ui.DetailMessageActivity;
 import com.yuuna.onesecmail.model.MessageModel;
 
 import java.text.ParseException;
@@ -43,7 +43,6 @@ public class NotificationService extends Service {
 
     private Handler handler = new Handler();
     private Runnable refresh;
-    public static SharedPreferences notify;
 
     private ArrayList<MessageModel> messageModelArrayList;
 
@@ -56,7 +55,7 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // do your jobs here
         refresh = () -> {
-            notify = getSharedPreferences(OneSecMail, Context.MODE_PRIVATE);
+            SharedPreferences notify = getSharedPreferences(OneSecMail, Context.MODE_PRIVATE);
             String login = notify.getString(TAG_USERNAME, "");
             String domain = notify.getString(TAG_DOMAIN, "");
 
@@ -109,7 +108,7 @@ public class NotificationService extends Service {
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, id, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Intent readIntent = new Intent(context, NotifikasiBroadcastReceiver.class).setAction("READ").putExtra("id", id);
+            Intent readIntent = new Intent(context, NotificationBroadcastReceiver.class).setAction("READ").putExtra("id", id);
             PendingIntent readPendingIntent = PendingIntent.getBroadcast(context, id, readIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             Date date = null;

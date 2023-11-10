@@ -1,6 +1,5 @@
 package com.yuuna.onesecmail.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,10 @@ import java.util.ArrayList;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> {
 
     private ArrayList<MessageModel> messageDataArrayList;
-    private Context mContext;
     private ItemClickListener clickListener;
 
-    public MessageAdapter(ArrayList<MessageModel> messageModelArrayList, Context context) {
+    public MessageAdapter(ArrayList<MessageModel> messageModelArrayList) {
         this.messageDataArrayList = messageModelArrayList;
-        this.mContext = context;
     }
 
     @Override
@@ -69,8 +66,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Holder> 
             from = itemView.findViewById(R.id.itemFrom);
             date = itemView.findViewById(R.id.itemDate);
             subject = itemView.findViewById(R.id.itemSubject);
-            itemView.setOnClickListener(view -> {
-                if (clickListener != null) clickListener.onClick(messageDataArrayList.get(getAdapterPosition()), view, getAdapterPosition());
+            itemView.setOnClickListener(v -> {
+                if (clickListener != null) clickListener.onClick(messageDataArrayList.get(getAdapterPosition()), v, getAdapterPosition());
             });
         }
     }

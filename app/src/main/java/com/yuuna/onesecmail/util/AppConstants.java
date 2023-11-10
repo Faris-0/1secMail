@@ -1,6 +1,6 @@
 package com.yuuna.onesecmail.util;
 
-public class SharedPreferences {
+public class AppConstants {
 
     // Shared Preferences -> OneSecMail
     public static final String OneSecMail = "OneSecMail";

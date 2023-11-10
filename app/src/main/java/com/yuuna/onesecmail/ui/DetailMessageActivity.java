@@ -1,11 +1,11 @@
-package com.yuuna.onesecmail.activity;
+package com.yuuna.onesecmail.ui;
 
 import static com.yuuna.onesecmail.util.NotificationService.notification;
 import static com.yuuna.onesecmail.util.RetrofitClient.retrofitAPI;
-import static com.yuuna.onesecmail.util.SharedPreferences.OneSecMail;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_DOMAIN;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_READ;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_USERNAME;
+import static com.yuuna.onesecmail.util.AppConstants.OneSecMail;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_DOMAIN;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_READ;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_USERNAME;
 
 import androidx.appcompat.app.AppCompatActivity;
 

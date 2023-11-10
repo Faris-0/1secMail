@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ONESECMAIL">
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".ui.SplashActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,9 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.DetailMessageActivity" />
+        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.DetailMessageActivity" />
         <service android:name=".util.NotificationService" />
-        <receiver android:name=".util.NotifikasiBroadcastReceiver" />
+        <receiver android:name=".util.NotificationBroadcastReceiver" />
     </application>
 </manifest>

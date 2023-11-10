@@ -1,11 +1,11 @@
-package com.yuuna.onesecmail.activity;
+package com.yuuna.onesecmail.ui;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.yuuna.onesecmail.util.RetrofitClient.retrofitAPI;
-import static com.yuuna.onesecmail.util.SharedPreferences.OneSecMail;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_DOMAIN;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_SAVED;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_USERNAME;
+import static com.yuuna.onesecmail.util.AppConstants.OneSecMail;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_DOMAIN;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_SAVED;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_USERNAME;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -72,7 +72,7 @@ public class home extends Fragment {
             Toast.makeText(getActivity(), "Email Copied", Toast.LENGTH_SHORT).show();
         });
         view.findViewById(R.id.hCreate).setOnClickListener(v -> {
-            if (edUsername.getText().toString().isEmpty()){
+            if (edUsername.getText().toString().isEmpty()) {
                 edUsername.setText(generateString(10));
                 createEmail();
             } else createEmail();

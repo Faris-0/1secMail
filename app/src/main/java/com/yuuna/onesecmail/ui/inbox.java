@@ -1,9 +1,9 @@
-package com.yuuna.onesecmail.activity;
+package com.yuuna.onesecmail.ui;
 
 import static com.yuuna.onesecmail.util.RetrofitClient.retrofitAPI;
-import static com.yuuna.onesecmail.util.SharedPreferences.OneSecMail;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_DOMAIN;
-import static com.yuuna.onesecmail.util.SharedPreferences.TAG_USERNAME;
+import static com.yuuna.onesecmail.util.AppConstants.OneSecMail;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_DOMAIN;
+import static com.yuuna.onesecmail.util.AppConstants.TAG_USERNAME;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +35,6 @@ public class inbox extends Fragment implements MessageAdapter.ItemClickListener 
 
     private Handler handler = new Handler();
     private Runnable refresh;
-    private MessageAdapter messageAdapter;
 
     private String username, domain;
 
@@ -62,7 +61,7 @@ public class inbox extends Fragment implements MessageAdapter.ItemClickListener 
             @Override
             public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
                 if (response.isSuccessful()) {
-                    messageAdapter = new MessageAdapter(response.body(), getActivity());
+                    MessageAdapter messageAdapter = new MessageAdapter(response.body());
                     rvMessages.setAdapter(messageAdapter);
                     messageAdapter.setClickListener(inbox.this);
                 }
