@@ -137,7 +137,7 @@ public class NotificationService extends Service {
                 context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
             }
 
-            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return;
+            if (Build.VERSION.SDK_INT >= 33 && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return;
             NotificationManagerCompat.from(context).notify(id, builder.build());
         }
     }
